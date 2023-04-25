@@ -12,6 +12,7 @@ The Module performs the following Functions:
 *
 """
 
+
 import sys
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
@@ -96,11 +97,26 @@ transform3 = DynamicFrame.fromDF(
 ############################
 
 # Storing the data on s3 specified path in parquet format
-datasink1 = glueContext.write_dynamic_frame.from_options(frame=transform1, connection_type="s3", connection_options={
-                                                         "path": s3_write_bucket+'/most-cases'}, format="parquet", transformation_ctx="datasink1")
-datasink2 = glueContext.write_dynamic_frame.from_options(frame=transform2, connection_type="s3", connection_options={
-                                                         "path": s3_write_bucket+'/most-deaths'}, format="parquet", transformation_ctx="datasink2")
-datasink3 = glueContext.write_dynamic_frame.from_options(frame=transform3, connection_type="s3", connection_options={
-                                                         "path": s3_write_bucket+'/most-recoveries'}, format="parquet", transformation_ctx="datasink3")
+datasink1 = glueContext.write_dynamic_frame.from_options(
+    frame=transform1,
+    connection_type="s3",
+    connection_options={"path": f'{s3_write_bucket}/most-cases'},
+    format="parquet",
+    transformation_ctx="datasink1",
+)
+datasink2 = glueContext.write_dynamic_frame.from_options(
+    frame=transform2,
+    connection_type="s3",
+    connection_options={"path": f'{s3_write_bucket}/most-deaths'},
+    format="parquet",
+    transformation_ctx="datasink2",
+)
+datasink3 = glueContext.write_dynamic_frame.from_options(
+    frame=transform3,
+    connection_type="s3",
+    connection_options={"path": f'{s3_write_bucket}/most-recoveries'},
+    format="parquet",
+    transformation_ctx="datasink3",
+)
 
 job.commit()
